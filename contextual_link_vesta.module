@@ -6,7 +6,7 @@
 function contextual_link_vesta_block_view_alter(&$data, $block) {
 
 global $user;
-if($user->roles[3]=='administrator'){
+if (in_array('administrator', $user->roles)) {
 
 		if(is_array($data) && array_key_exists('content', $data)){
 		
