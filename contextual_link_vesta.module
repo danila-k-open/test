@@ -1,0 +1,80 @@
+<?php 
+/**
+ * Implements hook_block_view_alter().
+ */
+  
+function contextual_link_vesta_block_view_alter(&$data, $block) {
+
+global $user;
+if($user->roles[3]=='administrator'){
+
+		if(is_array($data) && array_key_exists('content', $data)){
+		
+			if(is_array($data) && !is_array($data["content"])){
+				
+				 $block_content=$data["content"];
+				 $data["content"] = '<div class="contextual-links-wrapper"><ul class="contextual-links"><li class="block-configure first last"><a href="/admin/structure/block/manage/'.$block->module.'/'.$block->delta.'/configure">Настроить блок</a></li></ul></div>'.$block_content;
+
+			}
+			
+			if($block->module=="views" && isset($data["content"]['#markup'])){
+				 $block_content=$data["content"]['#markup'];
+				 $link_views=$data["content"]['#contextual_links']['views_ui'][0].'/'.$data["content"]['#views_contextual_links_info']['views_ui']['view_name'].'/edit/'.$data["content"]['#views_contextual_links_info']['views_ui']['view_display_id'];
+				 $data["content"]['#markup'] = '
+				 <div class="contextual-links-wrapper">
+				 <ul class="contextual-links">
+				 <li class="views-ui-edit first"><a href="/'.$link_views.'" >Редактировать представление</a></li>
+				 <li class="block-configure first last"><a href="/admin/structure/block/manage/'.$block->module.'/'.$block->delta.'/configure">Настроить блок</a></li>
+				 </ul>
+				 </div>'.$block_content;
+			}
+			
+			if($block->module=="facetapi" ){
+			
+				$name_facets=$data['content']['#facet']['name'];
+				$block_content=$data['content'][$name_facets]['#markup'];
+				$link=$data["content"]['#contextual_links']['facetapi'][0].'/'.$data["content"]['#contextual_links']['facetapi'][1][0].'/'.$data["content"]['#contextual_links']['facetapi'][1][1].'/'.$data["content"]['#contextual_links']['facetapi'][1][2];
+				$link_edit=$link.'/edit';
+				$link_dependencies=$link.'/dependencies';
+				$link_filters=$link.'/filters';
+				
+				
+				$data['content'][$name_facets]['#markup']='
+				<div class="contextual-links-wrapper">
+				<ul class="contextual-links">
+				<li class="facetapi-facetapi----edit first"><a href="/'.$link_edit.'" >Configure facet display</a></li>
+				<li class="facetapi-facetapi----dependencies"><a href="/'.$link_dependencies.'" >Configure facet dependencies</a></li>
+				<li class="facetapi-facetapi----filters"><a href="/'.$link_filters.'" >Configure facet filters</a></li>
+				<li class="block-configure first last"><a href="/admin/structure/block/manage/'.$block->module.'/'.$block->delta.'/configure">Настроить блок</a></li>
+				</ul>
+				</div>'.$block_content;
+				
+			}
+
+			/*
+			if($block->module=="menu" ){
+				
+				
+				 $menu_list=$data["content"]['#contextual_links']['menu'][0].'/'.$data["content"]['#contextual_links']['menu']['1'][0].'/edit/'.$data["content"]['#views_contextual_links_info']['views_ui']['view_display_id'].'/list';
+				 $menu_edit=$data["content"]['#contextual_links']['menu'][0].'/'.$data["content"]['#contextual_links']['menu']['1'][0].'/edit/'.$data["content"]['#views_contextual_links_info']['views_ui']['view_display_id'].'/edit';
+				 
+				 $data["content"]['#prefix'] = '
+				 
+				 <div class="contextual-links-wrapper">
+				 <ul class="contextual-links">
+				 <li class="menu-list first"><a href="/'.$menu_list.'">Список ссылок</a></li>
+				 <li class="menu-edit"><a href="/'.$menu_edit.'">Редактировать меню</a></li>
+				 <li class="block-configure first last"><a href="/admin/structure/block/manage/'.$block->module.'/'.$block->delta.'/configure">Настроить блок</a></li>
+				 </ul>
+				 </div>';
+				 
+			}	
+			
+			*/
+		
+		
+		}
+
+	}	
+
+}
