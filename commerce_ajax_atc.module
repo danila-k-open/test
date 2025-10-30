@@ -313,9 +313,10 @@ function commerce_ajax_atc_render_cart_block() {
     return '';
   }
   $cart_block = reset($cart_blocks);
-  $build = $cart_block->getPlugin()->build();
+  //$build = $cart_block->getPlugin()->build();
 
-  return \Drupal::service('renderer')->render($build);
+  //return \Drupal::service('renderer')->render($build);
+  return $entity_type_manager->getViewBuilder('block')->view($cart_block);
 }
 
 /**
