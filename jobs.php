@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Route;
 use Drupal\Core\DrupalKernel;
 use Drupal\Core\Site\Settings;
 
-$autoloader = require $_SERVER['PWD'] . '/../vendor/autoload.php';
+$autoloader = require $_SERVER['DOCUMENT_ROOT'] . '/../vendor/autoload.php';
 
 /**
  * Run drush command with ReactPHP components.
