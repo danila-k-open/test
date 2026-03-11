@@ -14,7 +14,23 @@ use Symfony\Component\Routing\Route;
 use Drupal\Core\DrupalKernel;
 use Drupal\Core\Site\Settings;
 
-$autoloader = require $_SERVER['PWD'] . '/../vendor/autoload.php';
+function findAutoloader($startDir) {
+    $dir = $startDir;
+    while ($dir !== '/' && !file_exists($dir . '/vendor/autoload.php')) {
+        $dir = dirname($dir);
+    }
+    if (file_exists($dir . '/vendor/autoload.php')) {
+        return $dir . '/vendor/autoload.php';
+    }
+    return null;
+}
+
+$autoloaderFile = findAutoloader(__DIR__);
+if (!$autoloaderFile) {
+    error_log("Advanced Queue Runner: Autoloader not found. Check Drupal installation.");
+    exit(1);
+}
+$autoloader = require $autoloaderFile;
 
 /**
  * Run drush command with ReactPHP components.
