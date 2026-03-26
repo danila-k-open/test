@@ -96,13 +96,14 @@ final class ProjectSecurityRequirement {
     if ($project_data['project_type'] !== 'core' || $project_data['name'] !== 'drupal' || empty($security_coverage_info)) {
       return new static();
     }
+    $title = $project_data['title'] ?? $project_data['name'] ?? 'Unknown';
     if (isset($project_data['existing_version'])) {
       [$major, $minor] = explode('.', $project_data['existing_version']);
       $existing_version = "$major.$minor";
       $next_version = "$major." . ((int) $minor + 1);
-      return new static($project_data['title'], $security_coverage_info, $existing_version, $next_version);
+      return new static($title, $security_coverage_info, $existing_version, $next_version);
     }
-    return new static($project_data['title'], $security_coverage_info);
+    return new static($title, $security_coverage_info);
   }
 
   /**
